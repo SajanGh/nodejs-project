@@ -14,11 +14,11 @@ export default class AuthController {
       const savedUser = await newUser.save();
 
       if (!newUser) {
-        res.status(401).json("Registration ");
+        res.status(401).json("Registration please ");
       }
       res.status(200).json(savedUser);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({err,message:"Please provide another email and username"});
     }
   };
 
@@ -46,15 +46,15 @@ export default class AuthController {
           }
         );
         res.status(200).json({ user, token });
-        console.log("Encrypted password---->", user.password);
+        // console.log("<--------Encrypted password---->", user.password);
         const saltSecret = config.SALT;
-        console.log(saltSecret);
+
         //>>>>>>>>
         const hashedpassword = crypto
           .pbkdf2Sync(password, saltSecret, 1000, 64, "sha512")
           .toString("hex");
 
-        console.log("Hashed Password---->", hashedpassword);
+        // console.log("<---------Hashed Password---->", hashedpassword);
 
         if (user.password !== hashedpassword) {
           return res.status(401).send("Invalid email or password");

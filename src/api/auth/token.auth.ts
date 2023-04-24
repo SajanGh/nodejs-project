@@ -7,19 +7,15 @@ import config from "../../config";
 export default class TokenAuthorization {
   verifyToken = async (req: any, res: any, next: NextFunction) => {
     if (!req.headers.authorization) {
-      res.send({ message: "token is not found" });
+      res.send({ message: "Token is not valid " });
     }
     try {
       const token = req.headers.authorization.split(" ")[1];
-      const verify = await jwt.verify(token, config.JWT_SEC!);
-      req.User = verify;
-      console.log(req.user, "ehhdfk");
+      const verify = jwt.verify(token, config.JWT_SEC!);
+      req.user = verify;
       next();
     } catch (error) {
-      res.json({
-        status: false,
-        msg: "Error",
-      });
+      res.status(500).json(error);
     }
   };
 }

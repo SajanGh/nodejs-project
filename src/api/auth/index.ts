@@ -8,7 +8,7 @@ import AuthController from "./auth.controller";
 import TokenAuthorization from "./token.auth";
 
 const authCtrl = new AuthController();
-const tokenVerify =new  TokenAuthorization();
+const tokenVerify = new TokenAuthorization();
 
 // Register
 router.post(
@@ -20,7 +20,8 @@ router.post(
 // Login
 router.post(
   "/login",
-  validateRequestBody(userValidation.userLoginSchema),tokenVerify.verifyToken,
+  validateRequestBody(userValidation.userLoginSchema),
+  tokenVerify.verifyToken,
   authCtrl.userLogin
 );
 

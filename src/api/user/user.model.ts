@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "user"],
+
       default: "user",
     },
     hash: String,
@@ -37,22 +37,16 @@ const UserSchema = new mongoose.Schema(
 // Salting and hasing password
 UserSchema.pre("save", async function (next) {
   const user = this;
-
   const saltValue = config.SALT;
-
   console.log(config.SALT);
   if (!user.isModified("password")) return next();
-  const salt = crypto.randomBytes(16).toString("hex");
+  // const salt = crypto.randomBytes(16).toString("hex");
   const hash = crypto
     .pbkdf2Sync(user.password, saltValue!, 1000, 64, `sha512`)
     .toString(`hex`);
-  user.salt = salt;
+  // user.salt = salt;
   user.password = hash;
   next();
 });
-
-UserSchema.methods.getEmail = function (): string {
-  return this.email;
-};
 
 export const User = mongoose.model("User", UserSchema);
